@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Front_End Dev ROMS</title>
+    <link rel="shortcut icon" href="download.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="PSP.JS"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        body {
+            background-color: #0b0b1b;
+            color: #e0e0ff;
+            font-family: "Orbitron";
+        }
+
+        header {
+            background: linear-gradient(to bottom, #1c2526, #0b0b1b);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 10px #00ffaa;
+            background-attachment: scroll;
+        }
+
+        header h1 {
+            font-size: 2em;
+            color: #00ffaa;
+            text-shadow: 0 0 8px #00ffaa;
+        }
+
+        nav a {
+            color: #e0e0ff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 1.1em;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+
+        nav a:hover {
+            color: #00ffaa;
+            text-shadow: 0 0 5px #00ffaa;
+        }
+
+        .hero {
+            background: url('https://source.unsplash.com/random/1920x1080/?sci-fi') no-repeat center/cover;
+            padding: 70px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .hero h2 {
+            font-size: 3rem ;
+            color: #00ffaa;
+            text-shadow: 0 0 10px #00ffaa;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            color: #e0e0ff;
+        }
+
+        .games-section, .download-section, .reviews-section {
+            padding: 40px 20px;
+            
+        }
+
+        .games-section h2, .download-section h2, .reviews-section h2 {
+            font-size: 2em;
+            color: #00ffaa;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 6rem;
+        }
+
+        .game-card {
+            background-color: #1c2526;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 15px rgba(0, 255, 170, 0.3);
+            transition: box-shadow 0.3s, transform 0.3s;
+            cursor: pointer;
+            width: 23rem;
+            background-attachment: fixed;
+            padding: 2px;
+        }
+
+        .game-card:hover {
+            box-shadow: 0 0 25px rgba(0, 255, 191, 0.8);
+            transform: translateY(-5px);
+        }
+
+        .game-card .img {
+            width: 100%;
+            height: 180px;
+            background-size: contain;
+            border-radius: 1rem;
+ }
+
+        .game-card h3 {
+            padding: 15px;
+            font-size: 1.3em;
+            color: #00ffaa;
+        }
+
+        .game-card p {
+            padding: 0 15px 15px;
+            color: #b0b0ff;
+            font-size: 0.9em;
+        }
+
+        .trailer-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 255, 170, 0.7);
+            border: none;
+            color: #0b0b1b;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .download-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .download-btn {
+            padding: 12px 25px;
+            background-color: #00ffaa;
+            color: #0b0b1b;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            align-content: center;
+        }
+
+        .download-btn:hover {
+            background-color: #00cc88;
+            box-shadow: 0 0 10px #00ffaa;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .review-card {
+            background-color: #1c2526;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #00ffaa;
+        }
+
+        .review-card p {
+            color: #b0b0ff;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .review-card span {
+            color: #00ffaa;
+            font-size: 0.8em;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #1c2526;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 800px;
+            position: relative;
+        }
+
+        .modal-content iframe {
+            width: 100%;
+            height: 450px;
+            border: none;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #ff4d4d;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #1c2526;
+            color: #888;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav a {
+                margin: 5px;
+            }
+
+            .hero h2 {
+                font-size: 1.8em;
+            }
+
+            .modal-content iframe {
+                height: 250px;
+            }
+        }
+
+    .search-container {
+      display: grid;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 600px;
+    }
+    .search-form {
+      display: flex;
+      width: 100%;
+      background: linear-gradient(45deg, #fec543, #4ecdc4);
+      padding: 10px;
+      border-radius: 25px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+    .search-form:hover {
+      transform: scale(1.05);
+    }
+    .search-input {
+      flex: 1;
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 20px 0 0 20px;
+      outline: none;
+      background-color: #fff;
+      color: #333;
+    }
+    
+    .fa-facebook{
+        color: #00cc88;
+        font-size: 1.9rem;
+        
+    }
+    .fa-square-twitter{
+        color: #00cc88;
+        font-size: 1.9rem;
+        
+    }
+    .fa-tiktok{
+        color: #00cc88;
+        font-size: 1.9rem;
+        
+    }
+    .fa-square-instagram{
+        color: #00cc88;
+        font-size: 1.9rem;
+        
+    }
+    .fa-telegram{
+        color: #00cc88;
+        font-size: 1.9rem;
+    }
+    .fa-x-twitter{
+        color: #00cc88;
+        font-size: 1.9rem;
+        
+    }
+
+    @media (max-width: 393px) {
+        .game-card{
+            width: 20px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .game-card{
+            width:  23rem;
+        }
+    }
+
+    @media (max-width: 520px){
+        .game-card{
+            width: 23rem;
+        }
+    }
+    
+    @media (max-width: 600px){
+        .game-card{
+            width: 23rem; 
+        }
+    }
+
+    @media (max-width: 384px){
+        header h1{
+            font-size: 2rem;
+        }
+
+        .search-button{
+            width: 1rem;
+            font-size: 1rem;
+        }
+        .game-card{
+            flex-direction: column;
+        }
+    }
+
+    @media (max-width: 950px){
+        .game-card{
+            width: 23rem;
+            margin-right: 100px;
+        }
+    }
+
+    @media (min-width: 550px){
+        .games-grid{
+            width: rem;
+            margin-left: 100px;
+            flex-direction: column;
+        }
+    }
+
+    @media (max-width: 800px){
+        .games-grid{
+            width: 23.99rem;
+        }
+    }
+
+    @media (max-width: 600px){
+        nav a{
+            font-size: 16px;
+        }
+    }
+
+    @media (max-width: 320px){
+        .game-card{
+            width: 22.99rem;
+            background-position: center;
+            font-size: 1px;
+        }
+        }
+
+        @media (max-width){
+            .game-card{
+                width: 20px;
+            }
+        }
+
+        @media (min-width: 2150px){
+            .game-card{
+                gap: 6rem;
+            }
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            animation: fadeIn 0.5s ease-in-out;
+            z-index: 1000;
+        }
+
+        .popup button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #fff;
+            color: #333;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .popup button:hover {
+            background-color: #ddd;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Front_End Dev ROMS</h1>
+        <nav>
+            <a href="#home" style="font-weight: 900;">Home<i class="fa-solid fa-house"></i></a>
+            <a href="#games" style="font-weight: 900;">Roms</a>
+            <a href="#downloads" style="font-weight: 900;">Downloads</a>
+            <a href="#reviews" style="font-weight: 900;">Reviews</a>
+        </nav>
+        <div class="search-container">
+    <form class="search-form" action="https://www.google.com/search" method="GET">
+      <input type="text" name="q" class="search-input" placeholder="Search Anything..." required>
+    </form>
+  </div>
+    </header>
+
+    <section class="hero" id="home">
+        <h2>Launch Into Epic Roms with Front_End Dev ROMS</h2>
+        <p>Join us in facebook instagram tikok telegram x club and twitter</p>
+    </section>
+
+    <section class="games-section" id="games">
+        <h2 style="font-family: 'Orbitron'; color: #00cc88;">PORTABLE PLAYSTATION ROMS</h2>
+        <div class="games-grid">
+            <div class="game-card">
+                <img src="need-for-speed-shift.webp" alt="ROM 1">
+                <button class="trailer-btn"><a href="#" style=" text-decoration: none; color: #1c2526;">Watch Trailer</a></button>
+                <h3>Assassins-Creed-Bloodlines</h3>
+                <p style="font-weight: 900; font-size: 1rem;">Feel The bloodline in your veins</p>
+                <button style="margin-left: 3rem; border-radius: 10px; border: none; box-shadow: 0 0 25px rgba(0, 255, 191, 0.8); background-color: #00cc88; padding: 9px; margin-bottom: 10px;"><a href="#" style="text-decoration: none; font-size: 1.9rem; background-color: #00cc88; color: #000; border-radius: 10px; font-family: Orbitron; font-weight: 900; padding: 9px;">Download</a></button>
+            </div>
+            <div class="game-card">
+                <img src="wwe-smackdown-vs-raw-2007.webp" alt="ROM 2">
+                <button class="trailer-btn" onclick="showTrailer('https://www.youtube.com/embed/dQw4w9WgXcQ')">Watch Trailer</button>
+                <h3>Mortal-Kombat-Unchained</h3>
+                <p style="font-weight: 900; font-size: 1rem;">Battle in the tournament and be the champion</p>
+                <button style="margin-left: 3rem; border-radius: 10px; border: none; box-shadow: 0 0 25px rgba(0, 255, 191, 0.8); background-color: #00cc88; padding: 9px; margin-bottom: 10px;"><a href="#" style="text-decoration: none; font-size: 1.9rem; background-color: #00cc88; color: #000; border-radius: 10px; font-family: Orbitron; font-weight: 900; padding: 9px;">Download</a></button>
+            </div>
+            <div class="game-card">
+                <img src="wwe-smackdown-vs-raw-2011.webp" alt="ROM 3">
+                <button class="trailer-btn" onclick="showTrailer('https://www.youtube.com/embed/dQw4w9WgXcQ')">Watch Trailer</button>
+                <h3>Dragon-Ball-z-shin-Budokai Another Road</h3>
+                <p style="font-weight: 900; font-size: 1rem;">Battle big enemies and have victory</p>
+                <button style="margin-left: 3rem; border-radius: 10px; border: none; box-shadow: 0 0 25px rgba(0, 255, 191, 0.8); background-color: #00cc88; padding: 9px; margin-bottom: 10px;"><a href="#" style="text-decoration: none; font-size: 1.9rem; background-color: #00cc88; color: #000; border-radius: 10px; font-family: Orbitron; font-weight: 900; padding: 9px;">Download</a></button>
+            </div>
+            <div class="game-card">
+                <img src="star-wars-the-force-unleashed.webp" alt="ROM 4">
+                <button class="trailer-btn" onclick="showTrailer('https://www.youtube.com/embed/dQw4w9WgXcQ')">Watch Trailer</button>
+                <h3>Dragon-Ball-z-shin-Budokai 2</h3>
+                <p style="font-weight: 900; font-size: 1rem;">Battle strong enemies and win</p>
+                <button style="margin-left: 3rem; border-radius: 10px; border: none; box-shadow: 0 0 25px rgba(0, 255, 191, 0.8); background-color: #00cc88; padding: 9px; margin-bottom: 10px;"><a href="Dragon Ball Z - Shin Budokai 2 (Europe) (En,Fr,De,Es,It).zip" style="text-decoration: none; font-size: 1.9rem; background-color: #00cc88; color: #000; border-radius: 10px; font-family: Orbitron; font-weight: 900; padding: 9px;">Download</a></button>
+            </div>
+            <div class="game-card">
+                <img src="x-men-origins-wolverine.webp" alt="ROM 5">
+                <button class="trailer-btn" onclick="showTrailer('https://www.youtube.com/embed/dQw4w9WgXcQ')">Watch Trailer</button>
+                <h3>Dragon-Ball-z-shin-Budokai</h3>
+                <p style="font-weight: 900; font-size: 1rem;">Battle emense enemies and win</p>
+                <button style="margin-left: 3rem; border-radius: 10px; border: none; box-shadow: 0 0 25px rgba(0, 255, 191, 0.8); background-color: #00cc88; padding: 9px; margin-bottom: 10px;"><a href="#" style="text-decoration: none; font-size: 1.9rem; background-color: #00cc88; color: #000; border-radius: 10px; font-family: Orbitron; font-weight: 900; padding: 9px;">Download</a></button>
+            </div>
+            <div class="game-card">
+                <img src="james-camerons-avatar-the-game.webp" alt="ROM 6">
+                <button class="trailer-btn" onclick="showTrailer('https://www.youtube.com/embed/dQw4w9WgXcQ')">Watch Trailer</button>
+                <h3>Dragon-Ball-z-Tenkaichi-tag-Team</h3>
+                <p style="font-weight: 900; font-size: 1rem;">Battle Tag team enemies and win</p>
+                <button style="margin-left: 3rem; border-radius: 10px; border: none; box-shadow: 0 0 25px rgba(0, 255, 191, 0.8); background-color: #00cc88; padding: 9px; margin-bottom: 10px;"><a href="#" style="text-decoration: none; font-size: 1.9rem; background-color: #00cc88; color: #000; border-radius: 10px; font-family: Orbitron; font-weight: 900; padding: 9px;">Download</a></button>
+            </div>
+            <div class="game-card">
+                <img src="justice-league-heroes.webp" alt="ROM 7">
+                <button class="trailer-btn" onclick="showTrailer('https://www.youtube.com/embed/dQw4w9WgXcQ')">Watch Trailer</button>
+                <h3>X-men-legends-ii-Rise-of-Apocalypse</h3>
+                <p style="font-weight: 900; font-size: 1rem;">Battle in an alien apocalypse with the X-men</p>
+                <button style="margin-left: 3rem; border-radius: 10px; border: none; box-shadow: 0 0 25px rgba(0, 255, 191, 0.8); background-color: #00cc88; padding: 9px; margin-bottom: 10px;"><a href="#" style="text-decoration: none; font-size: 1.9rem; background-color: #00cc88; color: #000; border-radius: 10px; font-family: Orbitron; font-weight: 900; padding: 9px;">Download</a></button>
+            </div>
+             <div class="game-card">
+                <img src="marvel-ultimate-alliance-2.webp" alt="ROM 8">
+                <button class="trailer-btn" onclick="showTrailer('https://www.youtube.com/embed/dQw4w9WgXcQ')">Watch Trailer</button>
+                <h3>Star-wars-Battlefront-ii</h3>
+                <p style="font-weight: 900; font-size: 1rem;">Battle in an alien war were there weapons are out of this world battle now and win the battle</p>
+                <button style="margin-left: 3rem; border-radius: 10px; border: none; box-shadow: 0 0 25px rgba(0, 255, 191, 0.8); background-color: #00cc88; padding: 9px; margin-bottom: 10px;"><a href="#" style="text-decoration: none; font-size: 1.9rem; background-color: #00cc88; color: #000; border-radius: 10px; font-family: Orbitron; font-weight: 900; padding: 9px;">Download</a></button>
+            </div>
+             <div class="game-card">
+                <img src="naruto-ultimate-ninja-heroes.webp" alt="ROM 9">
+                <button class="trailer-btn" onclick="showTrailer('https://www.youtube.com/embed/dQw4w9WgXcQ')">Watch Trailer</button>
+                <h3>Fast-and-the-Furious-the-Tokyo-Drift</h3>
+                <p style="font-weight: 900; font-size: 1rem;">Race with the fastest cars in tokyo</p>
+                <button style="margin-left: 3rem; border-radius: 10px; border: none; box-shadow: 0 0 25px rgba(0, 255, 191, 0.8); background-color: #00cc88; padding: 9px; margin-bottom: 10px;"><a href="#" style="text-decoration: none; font-size: 1.9rem; background-color: #00cc88; color: #000; border-radius: 10px; font-family: Orbitron; font-weight: 900; padding: 9px;">Download</a></button>
+            </div>
+            <div class="game-card">
+                <img src="naruto-shippuden-legends-akatsuki-rising.webp" alt="ROM 10">
+                <button class="trailer-btn" onclick="showTrailer('https://www.youtube.com/embed/dQw4w9WgXcQ')">Watch Trailer</button>
+                <h3>God-of-War-Chains-of-Olympus</h3>
+                <p style="font-weight: 900; font-size: 1rem;">Complete the quest and become a god</p>
+                <button style="margin-left: 3rem; border-radius: 10px; border: none; box-shadow: 0 0 25px rgba(0, 255, 191, 0.8); background-color: #00cc88; padding: 9px; margin-bottom: 10px;"><a href="#" style="text-decoration: none; font-size: 1.9rem; background-color: #00cc88; color: #000; border-radius: 10px; font-family: Orbitron; font-weight: 900; padding: 9px;">Download</a></button>
+            </div>
+            <div class="game-card">
+                <img src="naruto-shippuden-ultimate-ninja-heroes-3.webp" alt="ROM 11">
+                <button class="trailer-btn" onclick="showTrailer('https://www.youtube.com/embed/dQw4w9WgXcQ')">Watch Trailer</button>
+                <h3>Grand-theft-Auto-vice-city-Stories</h3>
+                <p style="font-weight: 900; font-size: 1rem;">Complete all mission and run vice city</p>
+                <button style="margin-left: 3rem; border-radius: 10px; border: none; box-shadow: 0 0 25px rgba(0, 255, 191, 0.8); background-color: #00cc88; padding: 9px; margin-bottom: 10px;"><a href="#" style="text-decoration: none; font-size: 1.9rem; background-color: #00cc88; color: #000; border-radius: 10px; font-family: Orbitron; font-weight: 900; padding: 9px;">Download</a></button>
+            </div>
+            <div class="game-card">
+                <img src="army-of-two-the-40th-day.webp" alt="ROM 12">
+                <button class="trailer-btn" onclick="showTrailer('https://www.youtube.com/embed/dQw4w9WgXcQ')">Watch Trailer</button>
+                <h3>Monster-hunter-Freedom-unite</h3>
+                <p style="font-weight: 900; font-size: 1rem;">Explore and battle monters</p>
+                <button style="margin-left: 3rem; border-radius: 10px; border: none; box-shadow: 0 0 25px rgba(0, 255, 191, 0.8); background-color: #00cc88; padding: 9px; margin-bottom: 10px;"><a href="#" style="text-decoration: none; font-size: 1.9rem; background-color: #00cc88; color: #000; border-radius: 10px; font-family: Orbitron; font-weight: 900; padding: 9px;">Download</a></button>
+            </div>
+        </div>
+    </section>
+
+    <section class="download-section" id="downloads">
+        <h2>NEXT</h2>
+        <div class="download-grid">
+           <!-- <script>
+                onclick(window.prompt(`ARE YOU IN THE FIRST PAGE`))
+            </script>  -->
+            <a href="http://127.0.0.1:5500/NEXT.HTML" class="download-btn">PAGE1</a>
+            <a href="http://127.0.0.1:5500/NEXT%202.HTML" class="download-btn">PAGE2</a>
+            <a href="#" class="download-btn">PAGE3</a>
+            <a href="#" class="download-btn">PAGE4</a>
+            <a href="#" class="download-btn">PAGE5</a>
+            <a href="#" class="download-btn">PAGE6</a>
+            <a href="#" class="download-btn">PAGE7</a>
+            <a href="#" class="download-btn">PAGE8</a>
+            <a href="#" class="download-btn">PAGE9</a>
+            <a href="#" class="download-btn">PAGE10</a>
+        </div>
+    </section>
+
+    <section class="reviews-section" id="reviews">
+        <h2>Player Reviews</h2>
+        <div class="reviews-grid">
+            <div class="review-card">
+                <p>Assassins Creed Bloodlines is the best psp game it has good action packed quests</p>
+                <span>James Robert</span>
+            </div>
+            <div class="review-card">
+                <p>Grand Theft auto vice city is interesting game and with all the mission</p>
+                <span>King David</span>
+            </div>
+            <div class="review-card">
+                <p>Dragon ball z shin budokia 2 teh action packed fights with your enemise give the game a good rate </p>
+                <span>Victor Roland</span>
+            </div>
+        </div>
+    </section>
+
+    <div id="popup" class="popup">
+        <p>YOU ARE IN HOME PAGE2</p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+
+    <script>
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        window.onload = function() {
+            document.getElementById('popup').style.display = 'block';
+        };
+    </script>
+
+    <div class="modal" id="trailerModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeTrailer()">X</button>
+            <iframe id="trailerIframe" src=""></iframe>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; Follow us on social media! Support us via <a href="https://paypal.me/youraccount">PayPal</a>.</p>
+        <i class="fa-brands fa-facebook"></i> 
+        <i class="fa-brands fa-tiktok"></i> 
+        <i class="fa-brands fa-square-twitter"></i>
+        <i class="fa-brands fa-square-instagram"></i>
+        <i class="fa-brands fa-telegram"></i>
+        <i class="fa-brands fa-x-twitter"></i>
+    </footer>
+
+    <script>
+        function showTrailer(videoUrl) {
+            document.getElementById('trailerIframe').src = videoUrl;
+            document.getElementById('trailerModal').style.display = 'flex';
+        }
+
+        function closeTrailer() {
+            document.getElementById('trailerModal').style.display = 'none';
+            document.getElementById('trailerIframe').src = '';
+        }
+
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
